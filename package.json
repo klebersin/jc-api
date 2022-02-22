@@ -1,0 +1,19 @@
+{
+  "name": "jc-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/klebersin/jc-api.git",
+  "author": "kleber",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/app/index.js"
+  },
+  "dependencies": {
+    "@hapi/boom": "^9.1.4",
+    "hapi": "^18.1.0",
+    "mongoose": "^6.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
