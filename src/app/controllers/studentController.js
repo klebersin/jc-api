@@ -4,9 +4,9 @@ const StudentModel = require('../models/students');
 const getStudents = async (request, h) => {
     try {
         const students = await StudentModel.find();
-        return students.toJSON();
+        return students;
     } catch (error) {
-        throw Boom.badRequest(`Wrong fate format ${error}`);
+        console.log(error);
     }
     
 }

@@ -1,14 +1,17 @@
 'use strict';
 
 const Hapi = require('hapi');
-const { createStudent, getStudents, updateStudent, deteleStudent } = require('./controllers/studentController');
+const { createStudent, getStudents, updateStudent, deleteStudent } = require('./controllers/studentController');
 const db = require('./database').db;
 
 const init = async () => {
 
     const server = Hapi.server({
         port: 3000,
-        host: 'localhost'
+        host: 'localhost',
+        routes: {
+            cors: true
+        }
     });
 
     server.route({
@@ -29,7 +32,7 @@ const init = async () => {
     server.route({
         method: 'DELETE',
         path: '/students',
-        handler: deteleStudent
+        handler: deleteStudent
     });
 
     await server.start();
