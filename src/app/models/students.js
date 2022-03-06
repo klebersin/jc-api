@@ -6,10 +6,22 @@ const studentSchema = new Schema({
     type: String,
     required: true,
   },
-  name: String,
-  plastname: String,
-  mlastname: String,
-  grade: Number,
+  name: {
+    type: String,
+    required: true,
+  },
+  plastname: {
+    type: String,
+    required: true,
+  },
+  mlastname: {
+    type: String,
+    required: true,
+  },
+  grade: {
+    type: Number,
+    required: true,
+  },
   address: String,
   fatherNames: String,
   motherNames: String,

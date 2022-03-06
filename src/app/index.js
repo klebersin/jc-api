@@ -2,6 +2,10 @@
 
 const Hapi = require("hapi");
 const {
+  createInvoice,
+  getInvoices,
+} = require("./controllers/invoiceController");
+const {
   createStudent,
   getStudents,
   updateStudent,
@@ -37,6 +41,18 @@ const init = async () => {
     method: "DELETE",
     path: "/students/{studentId}",
     handler: deleteStudent,
+  });
+
+  server.route({
+    method: "GET",
+    path: "/invoice",
+    handler: getInvoices,
+  });
+
+  server.route({
+    method: "POST",
+    path: "/invoice",
+    handler: createInvoice,
   });
 
   await server.start();
