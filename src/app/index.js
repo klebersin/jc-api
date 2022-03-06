@@ -1,48 +1,51 @@
-'use strict';
+"use strict";
 
-const Hapi = require('hapi');
-const { createStudent, getStudents, updateStudent, deleteStudent } = require('./controllers/studentController');
-const db = require('./database').db;
+const Hapi = require("hapi");
+const {
+  createStudent,
+  getStudents,
+  updateStudent,
+  deleteStudent,
+} = require("./controllers/studentController");
+const db = require("./database").db;
 
 const init = async () => {
+  const server = Hapi.server({
+    port: 3000,
+    host: "localhost",
+    routes: {
+      cors: true,
+    },
+  });
 
-    const server = Hapi.server({
-        port: 3000,
-        host: 'localhost',
-        routes: {
-            cors: true
-        }
-    });
+  server.route({
+    method: "GET",
+    path: "/students",
+    handler: getStudents,
+  });
+  server.route({
+    method: "POST",
+    path: "/students",
+    handler: createStudent,
+  });
+  server.route({
+    method: "PUT",
+    path: "/students/{studentId}",
+    handler: updateStudent,
+  });
+  server.route({
+    method: "DELETE",
+    path: "/students/{studentId}",
+    handler: deleteStudent,
+  });
 
-    server.route({
-        method: 'GET',
-        path: '/students',
-        handler: getStudents
-    });
-    server.route({
-        method: 'POST',
-        path: '/students',
-        handler: createStudent
-    });
-    server.route({
-        method: 'PUT',
-        path: '/students',
-        handler: updateStudent
-    });
-    server.route({
-        method: 'DELETE',
-        path: '/students',
-        handler: deleteStudent
-    });
-
-    await server.start();
-    console.log('Server running on %s', server.info.uri);
+  await server.start();
+  console.log("Server running on %s", server.info.uri);
 };
 
-process.on('unhandledRejection', (err) => {
-
-    console.log(err);
-    process.exit(1);
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+  process.exit(1);
 });
 
 init();
