@@ -6,7 +6,7 @@
   "author": "kleber",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/app/index.js"
+    "start": "nodemon src/app/server.js"
   },
   "dependencies": {
     "@hapi/boom": "^9.1.4",
