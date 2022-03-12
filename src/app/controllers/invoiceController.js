@@ -4,12 +4,13 @@ const { fillWithCeros } = require("../helpers");
 const { INVOICE_STATUS } = require("../constans");
 
 const createInvoice = async (request, h) => {
-  const { items, student, amount } = request.payload;
+  const { items, student, amount, paymentMethod } = request.payload;
   try {
     const newInvoice = {
       code: `INV${fillWithCeros(await InvoiceModel.count())}`,
       amount,
       student,
+      paymentMethod,
     };
     const invoiceCreated = await InvoiceModel.create(newInvoice);
     await Promise.all(

@@ -10,21 +10,38 @@ const studentSchema = new Schema({
     type: String,
     required: true,
   },
-  plastname: {
+  fatherSurname: {
     type: String,
     required: true,
   },
-  mlastname: {
+  motherSurname: {
     type: String,
     required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  tutor: {
+    type: String,
+    required: true,
+  },
+  tutorCode: {
+    type: String,
+    required: true,
+  },
+  monthly: {
+    type: Number,
   },
   grade: {
     type: Number,
     required: true,
   },
   address: String,
-  fatherNames: String,
-  motherNames: String,
   status: {
     type: String,
     default: STUDENT_STATUS_TYPES.ACTIVE,

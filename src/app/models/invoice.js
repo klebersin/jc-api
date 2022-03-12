@@ -7,6 +7,7 @@ const invoiceSchema = Schema({
   code: { type: String, required: true },
   date: { type: Date, default: Date.now },
   amount: { type: Number, require: true },
+  paymentMethod: { type: String },
   discount: { type: Number, defaul: 0 },
   description: { type: String },
   createdAt: { type: Date, default: Date.now },
