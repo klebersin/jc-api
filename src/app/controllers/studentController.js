@@ -4,10 +4,55 @@ const StudentModel = require("../models/students");
 
 const getStudents = async (request, h) => {
   try {
-    const students = await StudentModel.find({
+    const { page, rowsPerPage, filterStudents } = request.query;
+    const filter = request.query.filterStudents || '';
+    const match = {
       status: STUDENT_STATUS_TYPES.ACTIVE,
-    });
-    return students;
+    }
+    if(filter){
+      match.$and = [
+        {
+          $or: [
+            {
+              name :{
+                $regex: `${filterStudents}`,
+                $options: `i`
+              }
+            },
+            {
+              fatherSurname :{
+                $regex: `${filterStudents}`,
+                $options: `i`
+              }
+            },
+            {
+              motherSurname :{
+                $regex: `${filterStudents}`,
+                $options: `i`
+              }
+            },
+            {
+              code :{
+                $regex: `${filterStudents}`,
+                $options: `i`
+              }
+            }
+          ]
+        }
+      ]
+    }
+    const students = await StudentModel.aggregate([{
+      $match: match
+    }])
+        .sort("name")
+        .skip(rowsPerPage*page)
+        .limit(+rowsPerPage)
+
+    const count = await StudentModel.count()
+    return {
+      items: students,
+      count
+    };
   } catch (error) {
     console.log(error);
   }
@@ -36,8 +81,8 @@ const updateStudent = async (request, h) => {
     const studentId = request.params.studentId;
     const student = request.payload;
     const updatedStudent = await StudentModel.findByIdAndUpdate(
-      studentId,
-      student
+        studentId,
+        student
     );
     return updatedStudent;
   } catch (error) {
