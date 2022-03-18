@@ -4,7 +4,7 @@ const Hapi = require("hapi");
 require("dotenv").config();
 const {
   createInvoice,
-  getInvoices,
+  getInvoices, getInvoceWithDetails,
 } = require("./controllers/invoiceController");
 const {
   createStudent,
@@ -56,6 +56,11 @@ const init = async () => {
     method: "POST",
     path: "/invoice",
     handler: createInvoice,
+  });
+  server.route({
+    method: "GET",
+    path: "/invoice/{id}",
+    handler: getInvoceWithDetails,
   });
 
   await server.start();

@@ -54,5 +54,30 @@ const getInvoices = async () => {
   ]);
   return invoices;
 };
+const getInvoceWithDetails = async (request, h) =>{
+  const { id } = request.query;
+  const invoices = InvoiceModel.aggregate([
+    {
+      $match: { status: { $ne: [INVOICE_STATUS.VOID] } },
+    },
+    {
+      $lookup: {
+        from: "invoiceitems",
+        localField: "_id",
+        foreignField: "invoice",
+        as: "invoiceItems",
+      },
+    },
+    {
+      $lookup: {
+        from: "students",
+        localField: "student",
+        foreignField: "_id",
+        as: "student",
+      },
+    },
+  ]);
+  return invoices
+}
 
-module.exports = { createInvoice, getInvoices };
+module.exports = { createInvoice, getInvoices, getInvoceWithDetails };

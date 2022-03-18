@@ -5,6 +5,7 @@ const StudentModel = require("../models/students");
 const getStudents = async (request, h) => {
   try {
     const { page, rowsPerPage, filterStudents } = request.query;
+    const skip = (rowsPerPage || 1 )*(page || 1);
     const filter = request.query.filterStudents || '';
     const match = {
       status: STUDENT_STATUS_TYPES.ACTIVE,
@@ -15,25 +16,25 @@ const getStudents = async (request, h) => {
           $or: [
             {
               name :{
-                $regex: `${filterStudents}`,
+                $regex: `${filter}`,
                 $options: `i`
               }
             },
             {
               fatherSurname :{
-                $regex: `${filterStudents}`,
+                $regex: `${filter}`,
                 $options: `i`
               }
             },
             {
               motherSurname :{
-                $regex: `${filterStudents}`,
+                $regex: `${filter}`,
                 $options: `i`
               }
             },
             {
               code :{
-                $regex: `${filterStudents}`,
+                $regex: `${filter}`,
                 $options: `i`
               }
             }
@@ -45,8 +46,8 @@ const getStudents = async (request, h) => {
       $match: match
     }])
         .sort("name")
-        .skip(rowsPerPage*page)
-        .limit(+rowsPerPage)
+        .skip(skip)
+        .limit(+(rowsPerPage || 5))
 
     const count = await StudentModel.count()
     return {
@@ -55,6 +56,7 @@ const getStudents = async (request, h) => {
     };
   } catch (error) {
     console.log(error);
+    return {items: [], count: 0};
   }
 };
 
