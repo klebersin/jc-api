@@ -4,7 +4,8 @@ const Hapi = require("hapi");
 require("dotenv").config();
 const {
   createInvoice,
-  getInvoices, getInvoceWithDetails,
+  getInvoices,
+  getInvoceWithDetails,
 } = require("./controllers/invoiceController");
 const {
   createStudent,
@@ -17,11 +18,10 @@ const db = require("./database").db;
 const init = async () => {
   const server = Hapi.server({
     port: process.env.PORT || 3000,
-    host: 'localhost',
     routes: {
       cors: {
-        origin: ['*']
-      }
+        origin: ["*"],
+      },
     },
   });
 
