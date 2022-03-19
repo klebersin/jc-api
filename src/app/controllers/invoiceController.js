@@ -22,12 +22,10 @@ const createInvoice = async (request, h) => {
         });
       })
     );
+    return invoiceCreated;
   } catch (error) {
     console.log(error);
   }
-  /**/
-  const invoice = await InvoiceModel.find();
-  return invoice;
 };
 
 const getInvoices = async () => {
@@ -54,7 +52,7 @@ const getInvoices = async () => {
   ]);
   return invoices;
 };
-const getInvoceWithDetails = async (request, h) =>{
+const getInvoceWithDetails = async (request, h) => {
   const { id } = request.query;
   const invoices = InvoiceModel.aggregate([
     {
@@ -77,7 +75,7 @@ const getInvoceWithDetails = async (request, h) =>{
       },
     },
   ]);
-  return invoices
-}
+  return invoices;
+};
 
 module.exports = { createInvoice, getInvoices, getInvoceWithDetails };

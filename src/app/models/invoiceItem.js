@@ -11,6 +11,7 @@ const invoiceItem = new Schema({
   unitPrice: { type: Number },
   totalPrice: { type: Number },
   type: { type: String, required: true },
+  sent: { type: Boolean, default: false },
   invoice: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Invoice",
