@@ -10,6 +10,7 @@ const {
 const {
   createStudent,
   getStudents,
+  getStudent,
   updateStudent,
   deleteStudent,
 } = require("./controllers/studentController");
@@ -29,6 +30,11 @@ const init = async () => {
     method: "GET",
     path: "/students",
     handler: getStudents,
+  });
+  server.route({
+    method: "GET",
+    path: "/students/{id}",
+    handler: getStudent,
   });
   server.route({
     method: "POST",
