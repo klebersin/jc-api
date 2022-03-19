@@ -5,63 +5,66 @@ const StudentModel = require("../models/students");
 const getStudents = async (request, h) => {
   try {
     const { page, rowsPerPage, filterStudents } = request.query;
-    const skip = (rowsPerPage || 1 )*(page || 1);
-    const filter = request.query.filterStudents || '';
+    const skip = (rowsPerPage || 1) * (page || 1);
+    const filter = request.query.filterStudents || "";
     const match = {
       status: STUDENT_STATUS_TYPES.ACTIVE,
-    }
-    if(filter){
+    };
+    if (filter) {
       match.$and = [
         {
           $or: [
             {
-              name :{
+              name: {
                 $regex: `${filter}`,
-                $options: `i`
-              }
+                $options: `i`,
+              },
             },
             {
-              fatherSurname :{
+              fatherSurname: {
                 $regex: `${filter}`,
-                $options: `i`
-              }
+                $options: `i`,
+              },
             },
             {
-              motherSurname :{
+              motherSurname: {
                 $regex: `${filter}`,
-                $options: `i`
-              }
+                $options: `i`,
+              },
             },
             {
-              code :{
+              code: {
                 $regex: `${filter}`,
-                $options: `i`
-              }
-            }
-          ]
-        }
-      ]
+                $options: `i`,
+              },
+            },
+          ],
+        },
+      ];
     }
-    const students = await StudentModel.aggregate([{
-      $match: match
-    }])
-        .sort("name")
-        .skip(skip)
-        .limit(+(rowsPerPage || 5))
+    const students = await StudentModel.aggregate([
+      {
+        $match: match,
+      },
+    ])
+      .sort("name")
+      .skip(skip)
+      .limit(+(rowsPerPage || 5));
 
-    const count = await StudentModel.count()
+    const count = await StudentModel.count();
     return {
       items: students,
-      count
+      count,
     };
   } catch (error) {
     console.log(error);
-    return {items: [], count: 0};
+    return { items: [], count: 0 };
   }
 };
 
 const getStudent = async (request, h) => {
   try {
+    console.log(request.payload.id);
     const student = await StudentModel.findById(request.payload.id);
     return student;
   } catch (error) {
@@ -83,8 +86,8 @@ const updateStudent = async (request, h) => {
     const studentId = request.params.studentId;
     const student = request.payload;
     const updatedStudent = await StudentModel.findByIdAndUpdate(
-        studentId,
-        student
+      studentId,
+      student
     );
     return updatedStudent;
   } catch (error) {
