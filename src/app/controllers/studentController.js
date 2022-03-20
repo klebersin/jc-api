@@ -1,4 +1,5 @@
 const { Boom } = require("@hapi/boom");
+const { default: mongoose } = require("mongoose");
 const { STUDENT_STATUS_TYPES } = require("../constans");
 const StudentModel = require("../models/students");
 
@@ -64,9 +65,24 @@ const getStudents = async (request, h) => {
 
 const getStudent = async (request, h) => {
   try {
-    console.log(request.payload.id);
-    const student = await StudentModel.findById(request.payload.id);
-    return student;
+    const { studentId } = request.params;
+
+    const student = await StudentModel.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(studentId),
+        },
+      },
+      {
+        $lookup: {
+          from: "invoices",
+          localField: "_id",
+          foreignField: "student",
+          as: "invoices",
+        },
+      },
+    ]);
+    return student[0];
   } catch (error) {
     console.log(error);
   }

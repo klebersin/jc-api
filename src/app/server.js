@@ -1,19 +1,15 @@
 "use strict";
 
-const Hapi = require("hapi");
+const Hapi = require("@hapi/hapi");
+const glob = require("glob");
+
 require("dotenv").config();
-const {
-  createInvoice,
-  getInvoices,
-  getInvoceWithDetails,
-} = require("./controllers/invoiceController");
-const {
-  createStudent,
-  getStudents,
-  getStudent,
-  updateStudent,
-  deleteStudent,
-} = require("./controllers/studentController");
+
+const validate = async (request, username, password, h) => {
+  console.log("here");
+  return { isValid: true, credentials: { id: 1, name: "kleber" } };
+};
+
 const db = require("./database").db;
 
 const init = async () => {
@@ -26,48 +22,21 @@ const init = async () => {
     },
   });
 
-  server.route({
-    method: "GET",
-    path: "/students",
-    handler: getStudents,
-  });
-  server.route({
-    method: "GET",
-    path: "/students/{id}",
-    handler: getStudent,
-  });
-  server.route({
-    method: "POST",
-    path: "/students",
-    handler: createStudent,
-  });
-  server.route({
-    method: "PUT",
-    path: "/students/{studentId}",
-    handler: updateStudent,
-  });
-  server.route({
-    method: "DELETE",
-    path: "/students/{studentId}",
-    handler: deleteStudent,
-  });
+  /*await server.register(require("@hapi/basic"));
 
-  server.route({
-    method: "GET",
-    path: "/invoice",
-    handler: getInvoices,
+  server.auth.strategy("login", "basic", {
+    validate,
   });
+  //server.auth.default("login");*/
 
-  server.route({
-    method: "POST",
-    path: "/invoice",
-    handler: createInvoice,
-  });
-  server.route({
-    method: "GET",
-    path: "/invoice/{id}",
-    handler: getInvoceWithDetails,
-  });
+  glob
+    .sync("/routes/*.js", {
+      root: __dirname,
+    })
+    .forEach((file) => {
+      const route = require(file);
+      server.route(route);
+    });
 
   await server.start();
   console.log("Server running on %s", server.info.uri);
