@@ -28,6 +28,8 @@ const createUser = async (request, h) => {
   return {};
 };
 
+const login = async (request, h) => {};
+
 module.exports = {
   createUser,
 };
